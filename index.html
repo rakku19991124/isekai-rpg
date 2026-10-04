@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>異世界RPG</title>
+<style>
+body{margin:0;background:#f3efe4;color:#2b241c;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN",sans-serif}
+.wrap{max-width:760px;margin:auto;padding:24px 16px}
+h1{font-size:32px;margin:8px 0 4px}.sub{color:#756b5d;margin-bottom:24px}
+.card{background:#fffdf7;border:1px solid #d8cdb9;border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 12px #0000000d}
+button{width:100%;padding:14px;margin:6px 0;border:0;border-radius:12px;background:#6b4f35;color:white;font-size:16px}
+#log{white-space:pre-wrap;line-height:1.7;color:#4d4338}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>異世界RPG</h1>
+<div class="sub">境界を越える旅人 ― 世界と世界を旅する冒険</div>
+<div class="card"><h2>アレリア王国</h2><p>第一世界・緑の大地</p><p>人間とモンスターが共に暮らす世界。町にはモンスターの商人や冒険者もいる。</p></div>
+<div class="card"><h2>行動</h2>
+<button onclick="act('町を探索した。モンスターの商人から旅の噂を聞いた。')">町を探索する</button>
+<button onclick="act('森へ向かった。野生のモンスターと出会った。')">森へ行く</button>
+<button onclick="act('世界の裂け目を調べた。向こう側に別の世界が見える……。')">世界の裂け目を調べる</button>
+<button onclick="act('宿屋で休んだ。HPが回復した。')">宿屋で休む</button>
+</div>
+<div class="card"><h2>冒険記録</h2><div id="log">旅を始めた。<br>アレリア王国へ到着した。</div></div>
+</div>
+<script>function act(text){document.getElementById('log').innerHTML += '<br>'+text;}</script>
+</body>
+</html>
