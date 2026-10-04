@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#172033">
+<title>境界を越える旅人 - プロトタイプ</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:#101622;color:#f4f6fb;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.app{max-width:680px;margin:auto;min-height:100vh;background:#1a2232}
+header{padding:22px 16px 16px;text-align:center;background:linear-gradient(#273653,#1a2232)}
+h1{font-size:24px;margin:0 0 5px}.sub{color:#aeb9cc;font-size:13px}
+main{padding:12px}
+.panel{background:#242e42;border:1px solid #3b4963;border-radius:14px;padding:14px;margin-bottom:11px}
+.hero{text-align:center;padding:20px 12px;background:linear-gradient(145deg,#303e5c,#202a3d)}
+.hero .symbol{font-size:62px}.hero h2{margin:8px 0 4px}.hero p{margin:0;color:#c2cad8;line-height:1.7}
+.location{display:flex;align-items:center;gap:12px}.location .icon{font-size:42px}
+button{width:100%;border:0;border-radius:11px;padding:13px 10px;margin:4px 0;background:#6379ed;color:white;font-size:16px;font-weight:800}
+button.secondary{background:#414e66}button:disabled{opacity:.4}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.log{height:170px;overflow:auto;background:#121925;border-radius:10px;padding:10px;font-size:13px;line-height:1.75}
+.tag{display:inline-block;background:#35445e;color:#d7dfed;border-radius:20px;padding:4px 8px;margin:3px 3px 0 0;font-size:12px}
+.world{cursor:pointer}.world:hover{border-color:#7489db}
+.hidden{display:none}
+.gold{color:#ffd45a}.muted{color:#aeb9cc}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<h1>🌌 境界を越える旅人</h1>
+<div class="sub">剣と魔法、そして人とモンスターが共に生きる世界</div>
+</header>
+<main>
+
+<section class="panel hero" id="intro">
+<div class="symbol">🗝️</div>
+<h2>世界の境界が、開き始めた。</h2>
+<p>この世界には、いくつもの異世界が存在する。<br>
+それぞれの世界には王がいて、魔王がいる。<br>
+そして、人間もモンスターも同じ大地で暮らしている。</p>
+<button id="start">旅を始める</button>
+</section>
+
+<section id="game" class="hidden">
+<div class="panel">
+<div class="location">
+<div class="icon">🏰</div>
+<div>
+<div class="muted">現在地</div>
+<h2 style="margin:2px 0">アレリア王国</h2>
+<div class="muted">第一世界・緑の大地</div>
+</div>
+</div>
+</div>
+
+<div class="panel">
+<h3 style="margin-top:0">👑 この世界について</h3>
+<p style="line-height:1.7;margin-bottom:8px">
+アレリア王国では、人間とモンスターが長い年月をかけて共に暮らしている。
+街の市場ではモンスターが店を営み、冒険者として旅をする者も珍しくない。
+</p>
+<span class="tag">人間とモンスターの共存</span>
+<span class="tag">剣と魔法</span>
+<span class="tag">王国</span>
+</div>
+
+<div class="panel">
+<h3 style="margin-top:0">📖 冒険の始まり</h3>
+<p id="story" style="line-height:1.75">王都の外れで、見たことのない光が空に浮かんでいる。王国の人々はそれを「世界の裂け目」と呼んでいるようだ。</p>
+<div class="actions">
+<button id="town">🏘️ 街を歩く</button>
+<button id="forest">🌲 森へ行く</button>
+<button id="rift">🌌 裂け目を見る</button>
+<button id="rest" class="secondary">🏠 宿屋で休む</button>
+</div>
+</div>
+
+<div class="panel">
+<h3 style="margin-top:0">🗺️ 発見した世界</h3>
+<div class="world panel" style="margin:0;background:#1c2638" id="world1">
+<b>🌿 第一世界：アレリア</b><br>
+<span class="muted">人間とモンスターが共に暮らす王国。</span>
+</div>
+<div class="world panel" style="margin-top:8px;background:#1c2638;opacity:.55">
+<b>❓ 第二世界：？？？</b><br>
+<span class="muted">まだ境界が開いていない。</span>
+</div>
+</div>
+
+<div class="panel">
+<h3 style="margin-top:0">📜 冒険ログ</h3>
+<div id="log" class="log"></div>
+</div>
+</section>
+</main>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+function log(t){$("log").innerHTML+="・"+t+"<br>";$("log").scrollTop=$("log").scrollHeight}
+$("start").onclick=()=>{
+ $("intro").classList.add("hidden");$("game").classList.remove("hidden");
+ log("旅人はアレリア王国へやってきた。");
+ log("この世界では、人間もモンスターも同じ街で暮らしている。");
+};
+$("town").onclick=()=>{
+ $("story").textContent="王都を歩いていると、武器屋の前でゴブリンの店主が客と話している。酒場では人間とスライムが一緒に食事をしている。ここでは、それが当たり前らしい。";
+ log("街を歩いた。ゴブリンの武器屋を見つけた！");
+};
+$("forest").onclick=()=>{
+ $("story").textContent="森の奥で一匹のオオカミ型モンスターと出会った。敵意はない。どうやらこの森を守っているらしい。";
+ log("森でモンスターと出会った。しかし、襲ってはこなかった。");
+};
+$("rift").onclick=()=>{
+ $("story").textContent="空に浮かぶ裂け目から、見たことのない星空が見える。向こう側にも、ひとつの世界が存在しているようだ。";
+ log("🌌 世界の裂け目を発見した！");
+ log("裂け目の向こうから、誰かの声が聞こえた……。");
+};
+$("rest").onclick=()=>{
+ $("story").textContent="宿屋で一晩休んだ。明日の朝には、王都の王様が旅人に会いたいと言っているらしい。";
+ log("宿屋で休んだ。HPとMPが全回復した！");
+};
+$("world1").onclick=()=>log("第一世界アレリア。ここがあなたの旅の出発点だ。");
+</script>
+</body>
+</html>
