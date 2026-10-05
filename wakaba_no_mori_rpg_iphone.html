@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>若葉の森 RPG</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN",sans-serif;background:#f5f1e8;margin:0;color:#222}
+#app{max-width:720px;margin:auto;padding:16px}
+h1{font-size:24px}.box{background:white;border-radius:14px;padding:16px;margin:10px 0;box-shadow:0 2px 8px #0001}
+button{width:100%;padding:13px;margin:5px 0;border:0;border-radius:10px;background:#4b7bec;color:white;font-size:16px}
+button:disabled{background:#aaa}.log{white-space:pre-wrap;line-height:1.6;min-height:120px}
+.status{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+</style>
+</head>
+<body>
+<div id="app">
+<h1>🌱 若葉の森 RPG</h1>
+<div id="screen"></div>
+</div>
+<script>
+const state={gold:0,exp:0,level:1,area:"town",enemies:[],log:[],party:[{name:"人間",hp:20,maxhp:20,mp:5,maxmp:5,atk:4,def:3,spd:3}]};
+
+function render(){
+ const s=document.getElementById("screen");
+ if(state.area==="town"){s.innerHTML=`
+ <div class="box"><b>街</b><p>冒険の拠点です。</p></div>
+ <button onclick="forest()">若葉の森へ</button>
+ <button onclick="inn()">宿屋</button>
+ <button onclick="itemShop()">道具屋</button>
+ <button onclick="smith()">鍛冶屋</button>
+ <button onclick="temple()">神殿</button>
+ <div class="box"><b>所持金</b> ${state.gold}G　<b>経験値</b> ${state.exp}</div>
+ `;return}
+ if(state.area==="forest"){s.innerHTML=`
+ <div class="box"><b>若葉の森</b><p>最初のダンジョン。モンスターが現れる。</p></div>
+ <button onclick="encounter()">探索する</button>
+ <button onclick="town()">街へ戻る</button>
+ <div class="box log">${state.log.slice(-8).join("\\n")}</div>`;return}
+ if(state.area==="battle"){battleRender(s);return}
+}
+
+function town(){state.area="town";render()}
+function forest(){state.area="forest";state.log.push("若葉の森に入った。");render()}
+function inn(){state.party.forEach(p=>{p.hp=p.maxhp;p.mp=p.maxmp});state.log.push("宿屋でHPとMPが全回復した。");alert("全回復しました！");render()}
+function itemShop(){alert("道具屋：序盤の道具を買える場所です。");}
+function smith(){alert("鍛冶屋：装備を強化できる場所です。");}
+function temple(){alert("神殿：○○の証を使って職業を変更できます。");}
+
+function encounter(){
+ const r=Math.random();
+ let e;
+ if(r<0.5)e={name:"ぷに",hp:5,maxhp:5,atk:1,def:0,exp:2,gold:1,action:"こうげき"};
+ else if(r<0.85)e={name:"ゴブリン",hp:10,maxhp:10,atk:2,def:1,exp:4,gold:2,action:"こうげき"};
+ else e={name:"魔狼",hp:14,maxhp:14,atk:3,def:1,exp:6,gold:3,action:"とおぼえ"};
+ state.enemies=[e];state.area="battle";state.log.push(e.name+"があらわれた！");render()
+}
+
+function battleRender(s){
+ let e=state.enemies[0],p=state.party[0];
+ s.innerHTML=`<div class="box"><b>戦闘</b><p>敵：${e.name} HP ${e.hp}/${e.maxhp}</p>
+ <p>あなた：HP ${p.hp}/${p.maxhp} MP ${p.mp}/${p.maxmp}</p></div>
+ <button onclick="attack()">こうげき</button>
+ <button onclick="charge()">力ため</button>
+ <button onclick="escape()">にげる</button>
+ <div class="box log">${state.log.slice(-8).join("\\n")}</div>`;
+}
+function damage(base){return Math.max(1,Math.floor(base+(Math.random()*2-1)*base/10))}
+function attack(){
+ let e=state.enemies[0],p=state.party[0],d=damage(p.atk);
+ e.hp-=d;state.log.push("こうげき！ "+d+"ダメージ！");
+ if(e.hp<=0){win();return} enemyTurn();render()
+}
+function charge(){
+ let p=state.party[0];
+ p.atk+=3;state.log.push("力をためた！ 攻撃力が上がった！");
+ enemyTurn();render()
+}
+function enemyTurn(){
+ let e=state.enemies[0],p=state.party[0];
+ let d=damage(e.atk);
+ if(e.name==="ゴブリン"&&Math.random()<.35){d*=2;state.log.push("ゴブリンは なぐった！");}
+ else state.log.push(e.name+"の こうげき！");
+ p.hp-=d;state.log.push(d+"ダメージ！");
+ if(p.hp<=0){p.hp=1;state.log.push("力尽きそうだ……");}
+}
+function win(){
+ let e=state.enemies[0];
+ state.exp+=e.exp;state.gold+=e.gold;
+ state.log.push(e.name+"をたおした！ EXP "+e.exp+"　"+e.gold+"G");
+ state.enemies=[];state.area="forest";render()
+}
+function escape(){state.log.push("戦闘から逃げた。");state.area="forest";state.enemies=[];render()}
+render();
+</script>
+</body>
+</html>
